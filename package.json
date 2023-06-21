@@ -2,6 +2,7 @@
   "name": "vstosc",
   "displayName": "ToSc's VSCode Commands",
   "description": "VSCode commands developed by ToSc",
+  "publisher": "toscm",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.46.0"
@@ -25,6 +26,10 @@
         "title": "VSToSc: Switch to LaTeX math mode"
       }
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toscm/vstosc.git"
   },
   "scripts": {
     "compile": "tsc -p ./",
