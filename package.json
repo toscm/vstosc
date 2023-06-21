@@ -1,0 +1,55 @@
+{
+  "name": "vstosc",
+  "displayName": "ToSc's VSCode Commands",
+  "description": "VSCode commands developed by ToSc",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.46.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:vstosc.knitRmd",
+    "onCommand:vstosc.mathMode"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vstosc.knitRmd",
+        "title": "VSToSc: Knit RMD"
+      },
+      {
+        "command": "vstosc.mathMode",
+        "title": "VSToSc: Switch to LaTeX math mode"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile && npm run lint",
+    "test-compile": "tsc -p ./",
+    "test": "node ./out/test/runTest.js",
+    "vscode:prepublish": "npm run compile && npm run esbuild-base -- --minify",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.46.0",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "esbuild": "^0.14.26",
+    "eslint": "^7.15.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.1.3",
+    "typescript": "^4.1.2",
+    "vscode-test": "^1.4.1"
+  }
+}
