@@ -16,8 +16,10 @@ const mathMode = function () {
         const lineText = editor.document.lineAt(currentPosition.line).text;
 		let insertText = '~$$';
 		let deleteRange: vscode.Range | undefined;
+		let cursormove = 2;
 		if (currentPosition.character > 0 && lineText.charAt(currentPosition.character - 1) === ' ') {
 			deleteRange = new vscode.Range(currentPosition.with(currentPosition.line, currentPosition.character - 1), currentPosition);
+			cursormove = cursormove -1;
 		}
 		editor.edit((editBuilder) => {
 			if (deleteRange) {
@@ -25,7 +27,7 @@ const mathMode = function () {
 			}
 			editBuilder.insert(currentPosition, insertText);
 		}).then(() => {
-            const newPosition = new vscode.Position(currentPosition.line, currentPosition.character + 2);
+            const newPosition = new vscode.Position(currentPosition.line, currentPosition.character + cursormove);
             editor.selection = new vscode.Selection(newPosition, newPosition);
         });
 	}
