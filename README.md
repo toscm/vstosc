@@ -42,10 +42,11 @@ Inserts `~$$` at the current position and places the cursor in between `$$`. A p
 4. Hit F5 to and run the extension in a new *Extension Development Host* window.
 5. See [Debugging the extension](https://code.visualstudio.com/api/get-started/your-first-extension#debugging-the-extension) in case something isn't working as expected.
 6. Increase the version in [package.json](package.json) according to the rules of [Semantic versioning](https://semver.org/)
-7. Run `vsce package` to build the new package in VSCode package format `.vsix`
-8. Login to the [VSCode Marketplace](https://marketplace.visualstudio.com/manage/publishers/toscm) using a valid access token for the [Azure DevOps Organization toscm](https://dev.azure.com/toscm/) using command `vsce login toscm`
-9. Publish the extension using command `vsce publish`
-10. Do not forget to push your changes and tag the commit
+7. Run `npm install -g @vscode/vsce` to install the Visual Studio Code Extension Tool.
+8. Run `vsce package` to build the new package in VSCode package format `.vsix`
+9. Login to the [VSCode Marketplace](https://marketplace.visualstudio.com/manage/publishers/toscm) using a valid access token for the [Azure DevOps Organization toscm](https://dev.azure.com/toscm/) using command `vsce login toscm`
+10. Publish the extension using command `vsce publish`
+11. Do not forget to push your changes and tag the commit
 
 
 For further guidelines see [VSCode Extension API](https://code.visualstudio.com/api) and [VSCode Publishing Extensions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
