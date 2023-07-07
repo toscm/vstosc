@@ -26,7 +26,7 @@ For often used commands you might want to define a shortcut as shown below:
 
 ### runSelection
 
-Executes the current selection in a shell (/bin/sh or cmd.exe) and replaces the selection with the command output.
+Executes the current selection in a shell (`/bin/sh` or `cmd.exe`) and replaces the selection with the command output.
 
 ### runCommand
 
