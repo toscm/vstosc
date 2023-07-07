@@ -28,9 +28,13 @@ For often used commands you might want to define a shortcut as shown below:
 
 Executes the current selection in a shell (`/bin/sh` or `cmd.exe`) and replaces the selection with the command output.
 
+<img src="https://github.com/toscm/vstosc/assets/12760468/1bbebada-5916-4a34-82fe-0d5bc30a5877" alt="image" width=49%>
+
 ### runCommand
 
 Opens an input box asking the user for a command. The entered command will be run in a shell (`/bin/sh` or `cmd.exe`) and the output is inserted at the current cursor position. In case there is text selected while the command is executed, the selected text will be used as stdin for the command and replaced with the command's output.
+
+<img src="https://github.com/toscm/vstosc/assets/12760468/dc442bb0-8d9d-4e88-9397-353b4621da77" alt="image" width=49%>
 
 ### knitRmd
 
