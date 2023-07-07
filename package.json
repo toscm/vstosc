@@ -17,7 +17,7 @@
     }
   ],
   "engines": {
-    "vscode": "^1.46.0"
+    "vscode": "^1.79.1"
   },
   "categories": [
     "Other"

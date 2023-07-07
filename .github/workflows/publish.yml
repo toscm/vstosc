@@ -15,6 +15,6 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: Install vsce
-        run: npm i -g vsce
+        run: npm i -g @vscode/vsce
       - name: Publish
         run: vsce publish -p ${{ secrets.VSCE_TOKEN }}
