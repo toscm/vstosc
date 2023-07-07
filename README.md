@@ -1,3 +1,12 @@
+[![version](https://img.shields.io/vscode-marketplace/v/toscm.vstosc.svg?style=flat-square&label=vscode%20marketplace)](https://marketplace.visualstudio.com/items?itemName=toscm.vstosc)
+[![installs](https://img.shields.io/vscode-marketplace/d/toscm.vstosc.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=toscm.vstosc)
+<!--
+Enable this badge as soon as we have an action that is called build
+[![build](https://github.com/toscm/vstosc/actions/workflows/publish.yml/badge.svg)](https://github.com/toscm/vstosc/actions/workflows/publish.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/toscm/vstosc/deploy.yml?style=flat-square&branch=master)](https://github.com/toscm/vstosc/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/yzhang-gh/vscode-markdown/main.yml?style=flat-square&branch=master)](https://github.com/yzhang-gh/vscode-markdown/actions)
+-->
+
 # vstosc
 
 VSCode commands from ToSc and LiHu.
