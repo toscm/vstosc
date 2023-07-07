@@ -4,7 +4,7 @@
 
 # vstosc
 
-VSCode commands from ToSc and LiHu.
+VSCode commands from [ToSc](https://github.com/toscm/vstosc) and [LiHu](https://github.com/huy29433).
 
 ## Installation
 
