@@ -1,29 +1,46 @@
 {
   "name": "vstosc",
-  "displayName": "ToSc's VSCode Commands",
-  "description": "VSCode commands developed by ToSc",
+  "displayName": "VSCode Commands from ToSc and LiHu",
+  "description": "VSCode Commands from ToSc and LiHu",
   "publisher": "toscm",
-  "version": "1.0.1",
+  "version": "1.1.0",
+  "contributors": [
+    {
+        "name": "Tobias Schmidt",
+        "email": "tobias.schmidt331@gmail.com",
+        "url": "https://github.com/toscm"
+    },
+    {
+        "name": "Yanren Linda Hu",
+        "email": "yanren-linda.hu@klinik.uni-regensburg.de",
+        "url": "https://github.com/huy29433"
+    }
+  ],
   "engines": {
     "vscode": "^1.46.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:vstosc.knitRmd",
-    "onCommand:vstosc.mathMode"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "vstosc.knitRmd",
-        "title": "VSToSc: Knit RMD"
+        "title": "vstosc: Knit RMD"
       },
       {
         "command": "vstosc.mathMode",
-        "title": "VSToSc: Switch to LaTeX math mode"
+        "title": "vstosc: Switch to LaTeX math mode"
+      },
+      {
+        "command": "vstosc.runCommand",
+        "title": "vstosc: Run command"
+      },
+      {
+        "command": "vstosc.runSelection",
+        "title": "vstosc: Run selection"
       }
     ]
   },
@@ -47,7 +64,7 @@
     "@types/glob": "^7.1.3",
     "@types/mocha": "^8.0.4",
     "@types/node": "^12.11.7",
-    "@types/vscode": "^1.46.0",
+    "@types/vscode": "^1.79.1",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
     "esbuild": "^0.14.26",
