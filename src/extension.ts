@@ -2,6 +2,9 @@ import * as vscode from 'vscode';
 import { exec, ExecException } from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
+import * as path from 'path';
+import { updateRDocstring } from './updateRDocstring';
+
 
 const knitRmd = function () {
     let terminal = vscode.window.activeTerminal;
@@ -36,10 +39,11 @@ const mathMode = function () {
     }
 };
 
+
 const runCommand = function () {
     // Type checks
     if (!vscode.window.activeTextEditor) {
-        vscode.window.showErrorMessage('No active text editor found.');
+        vscode.window.showInformationMessage('No active text editor found.');
         return;
     }
 
@@ -80,7 +84,7 @@ const runSelection = function () {
     const window = vscode.window
     const editor = window.activeTextEditor;
     if (!editor) {
-        window.showErrorMessage('No active text editor found.');
+        window.showInformationMessage('No active text editor found.');
         return;
     }
     if (editor.selection.isEmpty) {
@@ -93,7 +97,7 @@ const runSelection = function () {
     const selection = editor.selection;
     const selectedText = editor.document.getText(selection);
     if (selectedText.trim() === "") {
-        window.showErrorMessage('Current selection is empty.');
+        window.showInformationMessage('Current selection is empty.');
     }
     const tempDir = os.tmpdir();
     const ext = process.platform === "win32" ? "bat" : "sh";
@@ -115,6 +119,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerTextEditorCommand('vstosc.mathMode', mathMode),
         vscode.commands.registerTextEditorCommand('vstosc.runCommand', runCommand),
         vscode.commands.registerTextEditorCommand('vstosc.runSelection', runSelection),
+        vscode.commands.registerTextEditorCommand('vstosc.updateRDocstring', updateRDocstring),
     ];
     context.subscriptions.push(...registrationObjs);
 };

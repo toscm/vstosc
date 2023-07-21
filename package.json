@@ -3,7 +3,7 @@
   "displayName": "VSCode Commands from ToSc and LiHu",
   "description": "VSCode Commands from ToSc and LiHu",
   "publisher": "toscm",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "contributors": [
     {
       "name": "Tobias Schmidt",
@@ -41,6 +41,10 @@
       {
         "command": "vstosc.runSelection",
         "title": "vstosc: Run selection"
+      },
+      {
+        "command": "vstosc.updateRDocstring",
+        "title": "vstosc: Update docstring of current R function"
       }
     ]
   },
