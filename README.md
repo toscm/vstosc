@@ -8,7 +8,9 @@ VSCode commands from [ToSc](https://github.com/toscm/vstosc) and [LiHu](https://
 
 ## Installation
 
-<img src="https://github.com/toscm/vstosc/assets/12760468/81d9d3e7-78aa-47a3-bf3a-6536970f1d50" alt="image" width=49%>
+Open the Extensions Tab in VSCode's activity bar and search for `vstosc`. Then click `install`.
+
+<img src="https://github.com/toscm/vstosc/assets/12760468/84d0406c-6607-4c2c-98d5-20e9990e1510" alt="image" width=49%>
 
 ## Usage
 
@@ -27,6 +29,16 @@ For often used commands you might want to define a shortcut as shown below:
 </div>
 
 ## Commands
+
+### updateRDocstring
+
+Updates the [roxygen2](https://roxygen2.r-lib.org/) docstring of the R function the cursor currently is in.
+
+⚠️WARNING: This command requires the R package [toscutil](https://github.com/toscm/toscutil) (version 2.7.1 or greater). For now you have to install it by hand using command: `install.packages("toscutil")` from within a running R session.
+
+🗒️NOTE: In case a function is defined multiple times in the same file. The generated roxygen2 docstring will always be based on the last definition of the function.
+
+<img src="https://github.com/toscm/vstosc/assets/12760468/e6633221-1de7-4d8d-baee-fcf2cdc84b62" alt="image" width=49%>
 
 ### runSelection
 
