@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import { updateRDocstring } from './updateRDocstring';
+import { testRFunction } from './testRFunction';
 
 
 const knitRmd = function () {
@@ -120,6 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerTextEditorCommand('vstosc.runCommand', runCommand),
         vscode.commands.registerTextEditorCommand('vstosc.runSelection', runSelection),
         vscode.commands.registerTextEditorCommand('vstosc.updateRDocstring', updateRDocstring),
+        vscode.commands.registerTextEditorCommand('vstosc.testRFunction', testRFunction),
     ];
     context.subscriptions.push(...registrationObjs);
 };

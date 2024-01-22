@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 import { exec } from 'child_process';
 import * as path from 'path';
-
+import { getLineOfCurrentRFunc, getNameOfCurrentRFunc, showNoEditorMsgAndExit } from './util';
 
 export function updateRDocstring() {
     console.log(`ENTERING FUNCTION updateRDocstring`);
     let editor = vscode.window.activeTextEditor ?? showNoEditorMsgAndExit();
     let document = editor.document;
-    let functionLine = editor.selection.active.line;
-    let functionName = getFunctionName(functionLine, document);
+    let functionLine = getLineOfCurrentRFunc(editor, editor.selection.active.line);
+    let functionName = getNameOfCurrentRFunc(functionLine, document);
     let docstringRange = getDocstringRange(functionLine, document);
     let normalizedPath = path.normalize(document.fileName).replace(/\\/g, '/');
     // Call R to get updated docstring. In case an error occurs, display the
@@ -36,32 +36,6 @@ export function updateRDocstring() {
     console.log(`RETURNING FROM FUNCTION updateRDocstring\n`);
 }
 
-
-function showNoEditorMsgAndExit(): never {
-    console.log(`ENTERING FUNCTION showNoEditorMsgAndExit`)
-    let msg = 'No active text editor found.';
-    vscode.window.showInformationMessage(msg);
-    console.log(`THROWING ERROR FROM FUNCTION showNoEditorMsgAndExit\n`)
-    throw new Error(msg);
-}
-
-
-function getFunctionName(functionLine: number, document: vscode.TextDocument): string {
-    console.log(`ENTERING FUNCTION getFunctionName`);
-    const lineText = document.lineAt(functionLine).text;
-    const functionRegex = /(\w+)\s*(<-|=)\s*function\b/;
-    const match = lineText.match(functionRegex);
-    if (match && match.length > 1) {
-        const functionName = match[1];
-        console.log(`Function Name: "${functionName}"`)
-        console.log(`Function Line: ${functionLine} (zero-based))`);
-        console.log(`RETURNING FROM FUNCTION getFunctionName\n`);
-        return functionName;
-    } else {
-        console.log(`THROWING ERROR FROM FUNCTION getFunctionName\n`);
-        throw new Error(`No function found on line ${functionLine}.`);
-    }
-}
 
 export function getDocstringRange(functionLine: number, document: vscode.TextDocument): vscode.Range {
     console.log(`ENTERING FUNCTION getDocstringRange`);

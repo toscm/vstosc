@@ -13,8 +13,10 @@
         "outfile",
         "roxygen",
         "Rscript",
+        "testthat",
         "tosc",
         "toscm",
+        "toscutil",
         "Toscvs",
         "vstosc",
         "Yanren"

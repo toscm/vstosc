@@ -3,7 +3,7 @@
   "displayName": "VSCode Commands from ToSc and LiHu",
   "description": "VSCode Commands from ToSc and LiHu",
   "publisher": "toscm",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "contributors": [
     {
       "name": "Tobias Schmidt",
@@ -45,6 +45,10 @@
       {
         "command": "vstosc.updateRDocstring",
         "title": "vstosc: Update docstring of current R function"
+      },
+      {
+        "command": "vstosc.testRFunction",
+        "title": "vstosc: Test current R function"
       }
     ]
   },

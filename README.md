@@ -30,16 +30,6 @@ For often used commands you might want to define a shortcut as shown below:
 
 ## Commands
 
-### updateRDocstring
-
-Updates the [roxygen2](https://roxygen2.r-lib.org/) docstring of the R function the cursor currently is in.
-
-⚠️WARNING: This command requires the R package [toscutil](https://github.com/toscm/toscutil) (version 2.7.1 or greater). For now you have to install it by hand using command: `install.packages("toscutil")` from within a running R session.
-
-🗒️NOTE: In case a function is defined multiple times in the same file. The generated roxygen2 docstring will always be based on the last definition of the function.
-
-<img src="https://github.com/toscm/vstosc/assets/12760468/e6633221-1de7-4d8d-baee-fcf2cdc84b62" alt="image" width=49%>
-
 ### runSelection
 
 Executes the current selection in a shell (`/bin/sh` or `cmd.exe`) and replaces the selection with the command output.
@@ -51,6 +41,24 @@ Executes the current selection in a shell (`/bin/sh` or `cmd.exe`) and replaces 
 Opens an input box asking the user for a command. The entered command will be run in a shell (`/bin/sh` or `cmd.exe`) and the output is inserted at the current cursor position. In case there is text selected while the command is executed, the selected text will be used as stdin for the command and replaced with the command's output.
 
 <img src="https://github.com/toscm/vstosc/assets/12760468/dc442bb0-8d9d-4e88-9397-353b4621da77" alt="image" width=49%>
+
+### updateRDocstring
+
+Updates the [roxygen2](https://roxygen2.r-lib.org/) docstring of the R function the cursor currently is in.
+
+⚠️WARNING: This command requires the R package [toscutil](https://github.com/toscm/toscutil) (version 2.7.1 or greater). For now you have to install it by hand using command: `install.packages("toscutil")` from within a running R session.
+
+🗒️NOTE: In case a function is defined multiple times in the same file. The generated roxygen2 docstring will always be based on the last definition of the function.
+
+<img src="https://github.com/toscm/vstosc/assets/12760468/e6633221-1de7-4d8d-baee-fcf2cdc84b62" alt="image" width=49%>
+
+### testRFunction
+
+Execute test cases for the R function where the cursor is currently positioned.
+
+1. If the current editor matches glob pattern `tests/testthat/test[-_]*.R`, command `testthat::test_file("${currentFilePath}")` is sent to the currently active terminal.
+2. If the current editor matches glob pattern `R/*.R`, the name of the currently edited function is determined and command `testthat::test_file("tests/testthat/test-{currentFunctionName}.R")` is sent instead.
+3. If the current editor matches neither of the above glob patterns or no terminal is active, nothing happens.
 
 ### knitRmd
 
