@@ -1,13 +1,16 @@
 import * as vscode from 'vscode';
 
+
+const functionRegex = /^([\w.]+)\s*(<-|=)\s*function\b/;
+
+
 export function getLineOfCurrentRFunc(editor: vscode.TextEditor, startLine: number): number {
-    const regex = /(\w+)\s*(<-|=)\s*function\b/;
     const text = editor.document.lineAt(startLine).text;
     if (text.startsWith("#'")) {
         // Search downwards
         for (let line = startLine; line < editor.document.lineCount; line++) {
             const text = editor.document.lineAt(line).text;
-            if (!text.startsWith("#'") || regex.test(text)) {
+            if (!text.startsWith("#'") || functionRegex.test(text)) {
                 return line;
             }
         }
@@ -15,7 +18,7 @@ export function getLineOfCurrentRFunc(editor: vscode.TextEditor, startLine: numb
         // Search upwards
         for (let line = startLine; line >= 0; line--) {
             const text = editor.document.lineAt(line).text;
-            if (regex.test(text)) {
+            if (functionRegex.test(text)) {
                 return line;
             }
         }
@@ -23,10 +26,10 @@ export function getLineOfCurrentRFunc(editor: vscode.TextEditor, startLine: numb
     throw new Error("Function definition not found");
 }
 
+
 export function getNameOfCurrentRFunc(functionLine: number, document: vscode.TextDocument): string {
     console.log(`ENTERING FUNCTION getNameOfCurrentRFunc`);
     const lineText = document.lineAt(functionLine).text;
-    const functionRegex = /^(\w+)\s*(<-|=)\s*function\b/;
     const match = lineText.match(functionRegex);
     if (match && match.length > 1) {
         const functionName = match[1];

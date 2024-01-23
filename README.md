@@ -56,9 +56,19 @@ Updates the [roxygen2](https://roxygen2.r-lib.org/) docstring of the R function 
 
 Execute test cases for the R function where the cursor is currently positioned.
 
-1. If the current editor matches glob pattern `tests/testthat/test[-_]*.R`, command `testthat::test_file("${currentFilePath}")` is sent to the currently active terminal.
-2. If the current editor matches glob pattern `R/*.R`, the name of the currently edited function is determined and command `testthat::test_file("tests/testthat/test-{currentFunctionName}.R")` is sent instead.
-3. If the current editor matches neither of the above glob patterns or no terminal is active, nothing happens.
+1. If the file path of the currently edited file matches glob pattern `{package_dir}/tests/testthat/test[-_]*.R`, command `testthat::test_file("${currentFilePath}")` is sent to the currently active terminal.
+2. If the currently edited file matches glob pattern `{package_dir}/**/*.R`, the name of the currently edited function is determined and command `testthat::test_file("{package_dir}/tests/testthat/test-{currentFunctionName}.R")` is sent instead.
+3. If the current editor matches neither of the above glob patterns or no terminal is active, nothing happens (except for a info message appearing that explains why nothing happens).
+
+To speed up the develop-test-cycle even more, you might want to define a shortcut for this command. For instance, I have set up the following binding in my `keybindings.json` file:
+
+```json
+{
+    "key": "ctrl+shift+t",
+    "command": "vstosc.testRFunction",
+    "when": "editorTextFocus && editorLangId == 'r'"
+}
+```
 
 ### knitRmd
 
