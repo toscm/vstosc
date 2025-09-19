@@ -33,7 +33,7 @@ export function getNameOfCurrentRFunc(functionLine: number, document: vscode.Tex
     const match = lineText.match(functionRegex);
     if (match && match.length > 1) {
         const functionName = match[1];
-        console.log(`Function Name: "${functionName}"`)
+        console.log(`Function Name: "${functionName}"`);
         console.log(`Function Line: ${functionLine} (zero-based)`);
         console.log(`RETURNING FROM FUNCTION getNameOfCurrentRFunc\n`);
         return functionName;
@@ -45,18 +45,18 @@ export function getNameOfCurrentRFunc(functionLine: number, document: vscode.Tex
 
 
 export function showNoEditorMsgAndExit(): never {
-    console.log(`ENTERING FUNCTION showNoEditorMsgAndExit`)
+    console.log(`ENTERING FUNCTION showNoEditorMsgAndExit`);
     let msg = 'No active text editor found.';
     vscode.window.showInformationMessage(msg);
-    console.log(`THROWING ERROR FROM FUNCTION showNoEditorMsgAndExit\n`)
+    console.log(`THROWING ERROR FROM FUNCTION showNoEditorMsgAndExit\n`);
     throw new Error(msg);
 }
 
 
 export function showNoTerminalMsgAndExit(): never {
-    console.log(`ENTERING FUNCTION showNoEditorMsgAndExit`)
+    console.log(`ENTERING FUNCTION showNoEditorMsgAndExit`);
     let msg = 'No active Terminal was found.';
     vscode.window.showInformationMessage(msg);
-    console.log(`THROWING ERROR FROM FUNCTION showNoEditorMsgAndExit\n`)
+    console.log(`THROWING ERROR FROM FUNCTION showNoEditorMsgAndExit\n`);
     throw new Error(msg);
 }

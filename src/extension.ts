@@ -2,9 +2,11 @@ import * as vscode from 'vscode';
 import { exec, ExecException } from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
-import * as path from 'path';
 import { updateRDocstring } from './updateRDocstring';
 import { testRFunction } from './testRFunction';
+
+// Track the last focused element type
+let lastFocusedElement: 'terminal' | 'editor' | 'unknown' = 'unknown';
 
 
 const knitRmd = function () {
@@ -69,7 +71,7 @@ const runCommand = function () {
 
     };
     const handleInput = function (input: string | undefined) {
-        if (typeof input === 'undefined') {return;}; // User canceled the input box
+        if (typeof input === 'undefined') { return; }; // User canceled the input box
         fs.writeFileSync(commandFile, input);
         fs.writeFileSync(selectionFile, selectedText);
         var sh = process.platform === "win32" ? "cmd.exe /q /c" : "/bin/sh -e";
@@ -82,7 +84,7 @@ const runCommand = function () {
 };
 
 const runSelection = function () {
-    const window = vscode.window
+    const window = vscode.window;
     const editor = window.activeTextEditor;
     if (!editor) {
         window.showInformationMessage('No active text editor found.');
@@ -110,8 +112,39 @@ const runSelection = function () {
     exec(cmd, (error, stdout, stderr) => {
         editor.edit(editBuilder => {
             editBuilder.replace(selection, stdout);
-        })
-    } );
+        });
+    });
+};
+
+const toggleEditorTerminalFocus = async function () {
+    // Use the tracked focus state instead of current state
+    if (lastFocusedElement === 'terminal') {
+        // Terminal was focused, switch to editor
+        const activeEditor = vscode.window.activeTextEditor;
+        if (activeEditor) {
+            // Focus existing editor
+            await vscode.window.showTextDocument(activeEditor.document);
+            lastFocusedElement = 'editor';
+        } else {
+            // No active editor, create a new untitled document
+            const doc = await vscode.workspace.openTextDocument();
+            await vscode.window.showTextDocument(doc);
+            lastFocusedElement = 'editor';
+        }
+    } else {
+        // Editor or unknown was focused, switch to terminal
+        const activeTerminal = vscode.window.activeTerminal;
+        if (activeTerminal) {
+            // Focus existing terminal
+            activeTerminal.show();
+            lastFocusedElement = 'terminal';
+        } else {
+            // No active terminal, create a new one
+            const terminal = vscode.window.createTerminal('vstosc Terminal');
+            terminal.show();
+            lastFocusedElement = 'terminal';
+        }
+    }
 };
 
 export function activate(context: vscode.ExtensionContext) {
@@ -122,8 +155,30 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerTextEditorCommand('vstosc.runSelection', runSelection),
         vscode.commands.registerTextEditorCommand('vstosc.updateRDocstring', updateRDocstring),
         vscode.commands.registerTextEditorCommand('vstosc.testRFunction', testRFunction),
+        vscode.commands.registerCommand('vstosc.toggleEditorTerminalFocus', toggleEditorTerminalFocus),
     ];
-    context.subscriptions.push(...registrationObjs);
+
+    // Track focus changes
+    const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor((editor) => {
+        if (editor) {
+            lastFocusedElement = 'editor';
+        }
+    });
+
+    const onDidChangeActiveTerminal = vscode.window.onDidChangeActiveTerminal((terminal) => {
+        if (terminal) {
+            lastFocusedElement = 'terminal';
+        }
+    });
+
+    // Initialize focus state
+    if (vscode.window.activeTextEditor) {
+        lastFocusedElement = 'editor';
+    } else if (vscode.window.activeTerminal) {
+        lastFocusedElement = 'terminal';
+    }
+
+    context.subscriptions.push(...registrationObjs, onDidChangeActiveTextEditor, onDidChangeActiveTerminal);
 };
 
 export function deactivate() { };

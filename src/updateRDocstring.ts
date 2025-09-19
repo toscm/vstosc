@@ -48,10 +48,10 @@ export function getDocstringRange(functionLine: number, document: vscode.TextDoc
     let startPosition = new vscode.Position(docstringStartLine, 0);
     let endPosition = new vscode.Position(functionLine, 0);
     let docstringRange = new vscode.Range(startPosition, endPosition);
-    console.log(`docstringRange.start.line: ${docstringRange.start.line} (zero-based)`)
-    console.log(`docstringRange.start.character: ${docstringRange.start.character}`)
-    console.log(`docstringRange.end.line: ${docstringRange.end.line} (zero-based)`)
-    console.log(`docstringRange.end.character: ${docstringRange.end.character}`)
+    console.log(`docstringRange.start.line: ${docstringRange.start.line} (zero-based)`);
+    console.log(`docstringRange.start.character: ${docstringRange.start.character}`);
+    console.log(`docstringRange.end.line: ${docstringRange.end.line} (zero-based)`);
+    console.log(`docstringRange.end.character: ${docstringRange.end.character}`);
     console.log(`RETURNING FROM FUNCTION getDocstringRange\n`);
     return docstringRange;
 }

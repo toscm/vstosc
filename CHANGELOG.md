@@ -4,6 +4,10 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.4.0
+
+- Feature: Add command `vstosc.toggleEditorTerminalFocus` to toggle focus between editor and terminal
+
 ## 1.3.1
 
 - Bugfix: `testRFunction` and `updateRDocstring` now also work for functions with a dot in their name
