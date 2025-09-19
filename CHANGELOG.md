@@ -4,6 +4,10 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.4.1
+
+- Bugfix: fixed GitHub Actions for testing and publishing the extension.
+
 ## 1.4.0
 
 - Feature: Add command `vstosc.toggleEditorTerminalFocus` to toggle focus between editor and terminal
