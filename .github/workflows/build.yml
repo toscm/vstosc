@@ -10,14 +10,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
-        run: npm i
+        run: npm ci
+      - name: Build extension
+        run: npm run esbuild
       - name: Install vsce
         run: npm i -g @vscode/vsce
-      - name: Publish
+      - name: Package extension
         run: vsce package
