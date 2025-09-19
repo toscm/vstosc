@@ -82,6 +82,14 @@ rmarkdown::render("<path-of-currently-active-file")
 
 Inserts `~$$` at the current position and places the cursor in between `$$`. A potential leading space is removed.
 
+### toggleEditorTerminalFocus
+
+Smart focus switching between terminal and editor with `Ctrl+\``
+
+This command replaces the default VS Code `Ctrl+`` behavior with intelligent bidirectional focus switching. Instead of just opening the terminal, it toggles between your terminal and editor based on what was previously focused, creating a seamless workflow for rapid switching during development.
+
+The command uses focus tracking to remember whether you were last working in the terminal or editor, ensuring the toggle behavior works correctly even when accessed through the Command Palette.
+
 ## Contribute
 
 1. Clone this repo and open the folder in VSCode
