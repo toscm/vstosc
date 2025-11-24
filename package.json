@@ -1,9 +1,9 @@
 {
   "name": "vstosc",
-  "displayName": "VSCode Commands from ToSc and LiHu",
-  "description": "VSCode Commands from ToSc and LiHu",
+  "displayName": "VSTosc",
+  "description": "GoToAnything, runCommand, runSelection etc.",
   "publisher": "toscm",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "contributors": [
     {
       "name": "Tobias Schmidt",
@@ -47,6 +47,10 @@
         "title": "vstosc: Toggle focus between terminal and editor"
       },
       {
+        "command": "vstosc.goToAnything",
+        "title": "vstosc: Go To Anything"
+      },
+      {
         "command": "vstosc.updateRDocstring",
         "title": "vstosc: Update docstring of current R function"
       },
@@ -55,11 +59,36 @@
         "title": "vstosc: Test current R function"
       }
     ],
+    "configuration": {
+      "title": "vstosc",
+      "properties": {
+        "vstosc.shell.windows": {
+          "type": "string",
+          "default": "cmd.exe /q /c",
+          "description": "Shell command that runCommand and runSelection use on Windows before appending the generated script path."
+        },
+        "vstosc.shell.mac": {
+          "type": "string",
+          "default": "/bin/sh -e",
+          "description": "Shell command that runCommand and runSelection use on macOS before appending the generated script path."
+        },
+        "vstosc.shell.linux": {
+          "type": "string",
+          "default": "/bin/sh -e",
+          "description": "Shell command that runCommand and runSelection use on Linux before appending the generated script path."
+        }
+      }
+    },
     "keybindings": [
       {
         "command": "vstosc.toggleEditorTerminalFocus",
         "key": "ctrl+`",
-        "mac": "cmd+`"
+        "mac": "ctrl+`"
+      },
+      {
+        "command": "vstosc.goToAnything",
+        "key": "alt+g",
+        "mac": "alt+g"
       }
     ]
   },

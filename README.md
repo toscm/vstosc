@@ -2,9 +2,18 @@
 [![installs](https://img.shields.io/vscode-marketplace/d/toscm.vstosc.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=toscm.vstosc)
 [![build](https://github.com/toscm/vstosc/actions/workflows/build.yml/badge.svg)](https://github.com/toscm/vstosc/actions/workflows/build.yml)
 
-# vstosc
+# VSTosc
 
-VSCode commands from [ToSc](https://github.com/toscm/vstosc) and [LiHu](https://github.com/huy29433).
+Productivity shortcuts from [ToSc](https://github.com/toscm/vstosc), e.g.:
+
+- [goToAnything](#gotoanything) – Jump to UI areas or line:column instantly
+- [runCommand](#runcommand) – Run shell input against the selection/stdin
+- [runSelection](#runselection) – Execute selection as shell script inline
+- [toggleEditorTerminalFocus](#toggleeditorterminalfocus) – Smart editor/terminal toggle
+- [mathMode](#mathmode) – Insert `~$$` and place cursor inside math mode
+- [knitRmd](#knitrmd) – Render current file via `rmarkdown::render`
+- [updateRDocstring](#updaterdocstring) – Generate roxygen2 docs for current R fn
+- [testRFunction](#testrfunction) – Run the matching `testthat` file/function
 
 ## Installation
 
@@ -30,17 +39,25 @@ For often used commands you might want to define a shortcut as shown below:
 
 ## Commands
 
-### runSelection
-
-Executes the current selection in a shell (`/bin/sh` or `cmd.exe`) and replaces the selection with the command output.
-
-<img src="https://github.com/toscm/vstosc/assets/12760468/1bbebada-5916-4a34-82fe-0d5bc30a5877" alt="image" width=49%>
-
 ### runCommand
 
-Opens an input box asking the user for a command. The entered command will be run in a shell (`/bin/sh` or `cmd.exe`) and the output is inserted at the current cursor position. In case there is text selected while the command is executed, the selected text will be used as stdin for the command and replaced with the command's output.
+Opens an input box asking the user for a command. The entered command runs inside a configurable shell and the trimmed output is inserted at the current cursor position. If text is selected, it is passed as stdin to the command and replaced with the trimmed output.
+
+The following settings can be used to customize the shell used for command execution:
+
+- `vstosc.shell.windows` – default `cmd.exe /q /c`
+- `vstosc.shell.mac` – default `/bin/sh -e`
+- `vstosc.shell.linux` – default `/bin/sh -e`
+
+Each command is written to a temporary file, which is then executed using the configured shell. When customizing the shell command, make sure it accepts the pattern `<shell-command> <script-file>`, where `<script-file>` is the temporary file created by the extension. For example, to run everything through Git Bash on Windows, set `vstosc.shell.windows` to `"C:/Program Files/Git/bin/bash.exe" -lc`.
 
 <img src="https://github.com/toscm/vstosc/assets/12760468/dc442bb0-8d9d-4e88-9397-353b4621da77" alt="image" width=49%>
+
+### runSelection
+
+Executes the current selection using the same shell configuration described under [runCommand](#runcommand) (defaults: `/bin/sh -e` on macOS/Linux, `cmd.exe /q /c` on Windows) and replaces the selection with the trimmed command output.
+
+<img src="https://github.com/toscm/vstosc/assets/12760468/1bbebada-5916-4a34-82fe-0d5bc30a5877" alt="image" width=49%>
 
 ### updateRDocstring
 
@@ -58,7 +75,7 @@ Execute test cases for the R function where the cursor is currently positioned.
 
 1. If the file path of the currently edited file matches glob pattern `{package_dir}/tests/testthat/test[-_]*.R`, command `testthat::test_file("${currentFilePath}")` is sent to the currently active terminal.
 2. If the currently edited file matches glob pattern `{package_dir}/**/*.R`, the name of the currently edited function is determined and command `testthat::test_file("{package_dir}/tests/testthat/test-{currentFunctionName}.R")` is sent instead.
-3. If the current editor matches neither of the above glob patterns or no terminal is active, nothing happens (except for a info message appearing that explains why nothing happens).
+3. If the current editor matches neither of the above glob patterns or no terminal is active, nothing happens (except for an info message explaining why).
 
 To speed up the develop-test-cycle even more, you might want to define a shortcut for this command. For instance, I have set up the following binding in my `keybindings.json` file:
 
@@ -90,12 +107,40 @@ This command replaces the default VS Code `Ctrl+`` behavior with intelligent bid
 
 The command uses focus tracking to remember whether you were last working in the terminal or editor, ensuring the toggle behavior works correctly even when accessed through the Command Palette.
 
+### goToAnything
+
+Lightning-fast navigation to either a document position (`line[:column]`) or common VS Code UI areas. UI targets jump instantly, while line/column entries follow the classic `Go to Line/Column` flow (press `Enter` to confirm).
+
+Default shortcut: `Alt+G` (`Option+G` on macOS).
+
+Letters map to the following locations:
+
+| Key | Destination               |
+| --- | ------------------------- |
+| `a` | Active editor group       |
+| `b` | Sidebar                   |
+| `c` | Secondary sidebar         |
+| `d` | Debug console             |
+| `e` | Explorer                  |
+| `f` | Search                    |
+| `j` | Settings                  |
+| `J` | Settings (JSON)           |
+| `k` | Keyboard shortcuts        |
+| `K` | Keyboard shortcuts (JSON) |
+| `o` | Outline                   |
+| `p` | Panel                     |
+| `s` | Status bar                |
+| `t` | Terminal                  |
+| `x` | Extensions                |
+
+Numbers behave like VS Code's built-in `Go to Line/Column` feature, e.g. `120` jumps to line 120 and `42:15` jumps to line 42, column 15 (1-based). The options list is displayed beneath the input so you can keep the key hints visible while typing.
+
 ## Contribute
 
 1. Clone this repo and open the folder in VSCode
 2. Run `npm install` to install all dependencies
 3. Modify [package.json](package.json) and [src/extensions.ts](src/extensions.ts) as required (ChatGPT is your friend).
-4. Hit F5 to and run the extension in a new *Extension Development Host* window.
+4. Hit F5 to run the extension in a new *Extension Development Host* window.
 5. See [Debugging the extension](https://code.visualstudio.com/api/get-started/your-first-extension#debugging-the-extension) in case something isn't working as expected.
 6. Increase the version in [package.json](package.json) according to the rules of [Semantic versioning](https://semver.org/)
 7. Push your changes and tag the commit (see section [publish](#publish) for details about the publishing process triggered by tagging a commit from the main branch)

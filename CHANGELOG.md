@@ -4,6 +4,12 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.5.0
+
+- Added command [goToAnything](README.md#gotoanything)
+- Added settings for custom shells in commands [runCommand](README.md#runcommand) and [runSelection](README.md#runselection)
+- Output produced by [runCommand](README.md#runcommand) and [runSelection](README.md#runselection) is now trimmed automatically of leading/trailing whitespace
+
 ## 1.4.1
 
 - Bugfix: fixed GitHub Actions for testing and publishing the extension.
