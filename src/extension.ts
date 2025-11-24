@@ -187,7 +187,8 @@ const goToAnything = function () {
         'd': { label: 'Debug Console', command: 'workbench.debug.action.focusRepl' },
         'e': { label: 'Explorer', command: 'workbench.view.explorer' },
         'f': { label: 'Search', command: 'workbench.view.search' },
-        'g': { label: 'Source Control', command: 'workbench.view.scm' },
+        'g': { label: 'Source Control', command: 'workbench.scm.focus' },
+        'i': { label: 'AI Chat', command: 'workbench.action.chat.openagent' },
         'j': { label: 'Settings', command: 'workbench.action.openSettings' },
         // eslint-disable-next-line @typescript-eslint/naming-convention
         'J': { label: 'Settings (JSON)', command: 'workbench.action.openSettingsJson' },

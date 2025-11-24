@@ -123,6 +123,8 @@ Letters map to the following locations:
 | `d` | Debug console             |
 | `e` | Explorer                  |
 | `f` | Search                    |
+| `g` | Source control            |
+| `i` | AI Chat                   |
 | `j` | Settings                  |
 | `J` | Settings (JSON)           |
 | `k` | Keyboard shortcuts        |
