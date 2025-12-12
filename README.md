@@ -14,6 +14,7 @@ Productivity shortcuts from [ToSc](https://github.com/toscm/vstosc), e.g.:
 - [knitRmd](#knitrmd) – Render current file via `rmarkdown::render`
 - [updateRDocstring](#updaterdocstring) – Generate roxygen2 docs for current R fn
 - [testRFunction](#testrfunction) – Run the matching `testthat` file/function
+- [insertNumbers](#insertnumbers) – Generate and insert number sequences
 
 ## Installation
 
@@ -136,6 +137,24 @@ Letters map to the following locations:
 | `x` | Extensions                |
 
 Numbers behave like VS Code's built-in `Go to Line/Column` feature, e.g. `120` jumps to line 120 and `42:15` jumps to line 42, column 15 (1-based). The options list is displayed beneath the input so you can keep the key hints visible while typing.
+
+### insertNumbers
+
+Generates and inserts number sequences at the current cursor position based on a specification. The command opens an input dialog where you can specify the number range and step size.
+
+Supported formats:
+
+1. **`a:b`** - Creates integers from `a` to `b` (inclusive)
+   - Example: `3:7` generates: 3, 4, 5, 6, 7
+   - Example: `7:3` generates: 7, 6, 5, 4, 3 (descending)
+   - Example: `-2:2` generates: -2, -1, 0, 1, 2
+
+2. **`a:b:s`** - Creates numbers from `a` to `b` with step size `s` (inclusive)
+   - Example: `2:10:2` generates: 2, 4, 6, 8, 10
+   - Example: `0:1:0.25` generates: 0, 0.25, 0.5, 0.75, 1
+   - Example: `10:2:-2` generates: 10, 8, 6, 4, 2 (descending with negative step)
+
+The numbers are inserted one per line at the cursor position. If text is selected, it will be replaced with the generated numbers.
 
 ## Contribute
 
