@@ -57,6 +57,10 @@
       {
         "command": "vstosc.testRFunction",
         "title": "vstosc: Test current R function"
+      },
+      {
+        "command": "vstosc.insertNumbers",
+        "title": "vstosc: Insert Numbers"
       }
     ],
     "configuration": {
