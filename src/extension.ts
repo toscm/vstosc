@@ -89,7 +89,7 @@ const runCommand = function () {
 
     // Helper Functions
     const insertIntoEditor = function (error: ExecException | null, stdout: string, stderr: string) {
-        const trimmedOutput = stdout.trim();
+        const trimmedOutput = stdout.trimEnd();
         editor.edit(editBuilder => {
             if (selection.isEmpty) {
                 editBuilder.insert(selection.active, trimmedOutput);
@@ -139,7 +139,7 @@ const runSelection = function () {
     var inp = process.platform === "win32" ? "<nul" : "</dev/null";
     var cmd = `${shellCmd} ${commandFile} 2>&1 ${inp}`;
     exec(cmd, (error, stdout, stderr) => {
-        const trimmedOutput = stdout.trim();
+        const trimmedOutput = stdout.trimEnd();
         editor.edit(editBuilder => {
             editBuilder.replace(selection, trimmedOutput);
         });
