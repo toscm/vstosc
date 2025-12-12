@@ -41,7 +41,7 @@ For often used commands you might want to define a shortcut as shown below:
 
 ### runCommand
 
-Opens an input box asking the user for a command. The entered command runs inside a configurable shell and the trimmed output is inserted at the current cursor position. If text is selected, it is passed as stdin to the command and replaced with the trimmed output.
+Opens an input box asking the user for a command. The entered command runs inside a configurable shell and the output (with trailing whitespace removed) is inserted at the current cursor position. If text is selected, it is passed as stdin to the command and replaced with the output (with trailing whitespace removed).
 
 The following settings can be used to customize the shell used for command execution:
 
@@ -55,7 +55,7 @@ Each command is written to a temporary file, which is then executed using the co
 
 ### runSelection
 
-Executes the current selection using the same shell configuration described under [runCommand](#runcommand) (defaults: `/bin/sh -e` on macOS/Linux, `cmd.exe /q /c` on Windows) and replaces the selection with the trimmed command output.
+Executes the current selection using the same shell configuration described under [runCommand](#runcommand) (defaults: `/bin/sh -e` on macOS/Linux, `cmd.exe /q /c` on Windows) and replaces the selection with the command output (with trailing whitespace removed).
 
 <img src="https://github.com/toscm/vstosc/assets/12760468/1bbebada-5916-4a34-82fe-0d5bc30a5877" alt="image" width=49%>
 
