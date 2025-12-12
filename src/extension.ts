@@ -418,8 +418,8 @@ export const parseNumberSpec = (spec: string): number[] | null => {
         return null;
     }
     
-    // Validate step direction matches range direction
-    if ((b > a && step < 0) || (b < a && step > 0)) {
+    // Validate step direction matches range direction (allow a === b)
+    if (a !== b && ((b > a && step < 0) || (b < a && step > 0))) {
         return null;
     }
     
@@ -438,12 +438,20 @@ export const parseNumberSpec = (spec: string): number[] | null => {
         // Format: a:b:s (sequence with custom step)
         // Use counter-based approach to avoid floating-point precision errors
         if (step > 0) {
-            for (let count = 0; a + count * step <= b + Number.EPSILON; count++) {
-                numbers.push(a + count * step);
+            for (let count = 0; ; count++) {
+                const value = a + count * step;
+                if (value > b + Number.EPSILON) {
+                    break;
+                }
+                numbers.push(value);
             }
         } else {
-            for (let count = 0; a + count * step >= b - Number.EPSILON; count++) {
-                numbers.push(a + count * step);
+            for (let count = 0; ; count++) {
+                const value = a + count * step;
+                if (value < b - Number.EPSILON) {
+                    break;
+                }
+                numbers.push(value);
             }
         }
     }

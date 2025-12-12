@@ -49,6 +49,16 @@ suite('Extension Test Suite', () => {
 			assert.deepStrictEqual(result, [5]);
 		});
 
+		test('should handle single value range with step', () => {
+			const result = extension.parseNumberSpec('5:5:1');
+			assert.deepStrictEqual(result, [5]);
+		});
+
+		test('should handle single value range with negative step', () => {
+			const result = extension.parseNumberSpec('5:5:-1');
+			assert.deepStrictEqual(result, [5]);
+		});
+
 		test('should return null for invalid format (too few parts)', () => {
 			const result = extension.parseNumberSpec('5');
 			assert.strictEqual(result, null);
