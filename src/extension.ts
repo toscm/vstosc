@@ -399,38 +399,44 @@ const goToAnything = function () {
 export const parseNumberSpec = (spec: string): number[] | null => {
     const trimmed = spec.trim();
     const parts = trimmed.split(':');
-    
+
     if (parts.length < 2 || parts.length > 3) {
         return null;
     }
-    
+
     const a = parseFloat(parts[0]);
     const b = parseFloat(parts[1]);
-    const step = parts.length === 3 ? parseFloat(parts[2]) : 1;
-    
+    const hasCustomStep = parts.length === 3;
+    let step = 1;
+
     // Validate all parts are valid numbers
-    if (isNaN(a) || isNaN(b) || isNaN(step)) {
+    if (isNaN(a) || isNaN(b)) {
         return null;
     }
-    
-    // Validate step is not zero
-    if (step === 0) {
-        return null;
+
+    if (hasCustomStep) {
+        step = parseFloat(parts[2]);
+        if (isNaN(step)) {
+            return null;
+        }
+        // Validate step is not zero
+        if (step === 0) {
+            return null;
+        }
+        // Validate step direction matches range direction (allow a === b)
+        if (a !== b && ((b > a && step < 0) || (b < a && step > 0))) {
+            return null;
+        }
     }
-    
-    // Validate step direction matches range direction (allow a === b)
-    if (a !== b && ((b > a && step < 0) || (b < a && step > 0))) {
-        return null;
-    }
-    
+
     const numbers: number[] = [];
-    
+
     if (parts.length === 2) {
         // Format: a:b (integer sequence)
         const start = Math.trunc(a);
         const end = Math.trunc(b);
         const actualStep = start <= end ? 1 : -1;
-        
+
         for (let i = start; actualStep > 0 ? i <= end : i >= end; i += actualStep) {
             numbers.push(i);
         }
@@ -455,7 +461,7 @@ export const parseNumberSpec = (spec: string): number[] | null => {
             }
         }
     }
-    
+
     return numbers;
 };
 
@@ -465,7 +471,7 @@ const insertNumbers = async function () {
         vscode.window.showInformationMessage('No active text editor found.');
         return;
     }
-    
+
     const input = await vscode.window.showInputBox({
         prompt: 'Enter number specification (e.g., "3:7" or "2:10:2")',
         placeHolder: 'a:b or a:b:s',
@@ -483,27 +489,51 @@ const insertNumbers = async function () {
             return null;
         }
     });
-    
+
     if (input === undefined) {
         return; // User canceled
     }
-    
+
     const numbers = parseNumberSpec(input);
     // Defensive check - should not happen due to validation, but ensures type safety
     if (numbers === null || numbers.length === 0) {
         return;
     }
-    
-    // Insert numbers at cursor position, one per line
-    const text = numbers.join('\n');
-    const selection = editor.selection;
-    
+
+    const selections = editor.selections;
+    if (selections.length === 0) {
+        return;
+    }
+
+    if (selections.length === 1) {
+        const text = numbers.join('\n');
+        const selection = selections[0];
+
+        await editor.edit(editBuilder => {
+            if (selection.isEmpty) {
+                editBuilder.insert(selection.active, text);
+            } else {
+                editBuilder.replace(selection, text);
+            }
+        });
+        return;
+    }
+
+    if (numbers.length < selections.length) {
+        const selectionLabel = selections.length === 1 ? 'selection is' : 'selections are';
+        vscode.window.showErrorMessage(`Specification generated ${numbers.length} value${numbers.length === 1 ? '' : 's'} but ${selections.length} ${selectionLabel} active.`);
+        return;
+    }
+
     await editor.edit(editBuilder => {
-        if (selection.isEmpty) {
-            editBuilder.insert(selection.active, text);
-        } else {
-            editBuilder.replace(selection, text);
-        }
+        selections.forEach((selection, index) => {
+            const value = String(numbers[index]);
+            if (selection.isEmpty) {
+                editBuilder.insert(selection.active, value);
+            } else {
+                editBuilder.replace(selection, value);
+            }
+        });
     });
 };
 

@@ -4,6 +4,12 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.6.1
+
+- Bugfix: [insertNumbers](README.md#insertnumbers) now inserts numbers at every active cursor instead of only the first one.
+- Bugfix: Number sequences written without an explicit step (e.g., `7:3`) now work in descending order again.
+- Maintenance: Switched the integration test harness to `@vscode/test-electron` so `npm test` can download current VS Code builds reliably.
+
 ## 1.6.0
 
 - Added command [insertNumbers](README.md#insertnumbers) to generate ascending, descending, or stepped number sequences directly in the editor.

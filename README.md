@@ -231,6 +231,27 @@ selected, it will be replaced with the generated numbers.
    details about the publishing process triggered by tagging a commit from the
    main branch)
 
+### Testing
+
+To run the tests locally, execute the following commands in the extension root
+folder:
+
+```sh
+npm install
+npm test
+```
+
+Some background: automated tests run through VS Code's integration harness:
+`src/test/runTest.ts` boots a disposable VS Code instance via
+`@vscode/test-electron`, loads this extension from the workspace root, and
+executes the Mocha suite defined in `src/test/suite/extension.test.ts` (compiled
+into `out/test/suite`). The suite can rely on helper fixtures such as
+[test_data/functions.R](test_data/functions.R) when exercising R-specific
+behavior. To run everything locally, execute `npm test`, which first compiles
+the sources and runs ESLint (`pretest`), then launches the integration tests.
+The downloaded VS Code binaries are cached in `.vscode-test/` so subsequent runs
+re-use them.
+
 ### Publish
 
 Whenever a commit from the main branch receives a tag, the
