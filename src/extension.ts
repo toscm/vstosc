@@ -390,6 +390,123 @@ const goToAnything = function () {
     quickPick.show();
 };
 
+/**
+ * Parse a specification string and generate a list of numbers
+ * Supports formats:
+ * - "a:b" - integers from a to b (inclusive)
+ * - "a:b:s" - numbers from a to b with step s (inclusive)
+ */
+export const parseNumberSpec = (spec: string): number[] | null => {
+    const trimmed = spec.trim();
+    const parts = trimmed.split(':');
+    
+    if (parts.length < 2 || parts.length > 3) {
+        return null;
+    }
+    
+    const a = parseFloat(parts[0]);
+    const b = parseFloat(parts[1]);
+    const step = parts.length === 3 ? parseFloat(parts[2]) : 1;
+    
+    // Validate all parts are valid numbers
+    if (isNaN(a) || isNaN(b) || isNaN(step)) {
+        return null;
+    }
+    
+    // Validate step is not zero
+    if (step === 0) {
+        return null;
+    }
+    
+    // Validate step direction matches range direction (allow a === b)
+    if (a !== b && ((b > a && step < 0) || (b < a && step > 0))) {
+        return null;
+    }
+    
+    const numbers: number[] = [];
+    
+    if (parts.length === 2) {
+        // Format: a:b (integer sequence)
+        const start = Math.trunc(a);
+        const end = Math.trunc(b);
+        const actualStep = start <= end ? 1 : -1;
+        
+        for (let i = start; actualStep > 0 ? i <= end : i >= end; i += actualStep) {
+            numbers.push(i);
+        }
+    } else {
+        // Format: a:b:s (sequence with custom step)
+        // Use counter-based approach to avoid floating-point precision errors
+        if (step > 0) {
+            for (let count = 0; ; count++) {
+                const value = a + count * step;
+                if (value > b + Number.EPSILON) {
+                    break;
+                }
+                numbers.push(value);
+            }
+        } else {
+            for (let count = 0; ; count++) {
+                const value = a + count * step;
+                if (value < b - Number.EPSILON) {
+                    break;
+                }
+                numbers.push(value);
+            }
+        }
+    }
+    
+    return numbers;
+};
+
+const insertNumbers = async function () {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showInformationMessage('No active text editor found.');
+        return;
+    }
+    
+    const input = await vscode.window.showInputBox({
+        prompt: 'Enter number specification (e.g., "3:7" or "2:10:2")',
+        placeHolder: 'a:b or a:b:s',
+        validateInput: (value: string) => {
+            if (!value.trim()) {
+                return 'Please enter a specification';
+            }
+            const numbers = parseNumberSpec(value);
+            if (numbers === null) {
+                return 'Invalid format. Use "a:b" or "a:b:s" where a, b, and s are numbers';
+            }
+            if (numbers.length === 0) {
+                return 'Specification generates no numbers';
+            }
+            return null;
+        }
+    });
+    
+    if (input === undefined) {
+        return; // User canceled
+    }
+    
+    const numbers = parseNumberSpec(input);
+    // Defensive check - should not happen due to validation, but ensures type safety
+    if (numbers === null || numbers.length === 0) {
+        return;
+    }
+    
+    // Insert numbers at cursor position, one per line
+    const text = numbers.join('\n');
+    const selection = editor.selection;
+    
+    await editor.edit(editBuilder => {
+        if (selection.isEmpty) {
+            editBuilder.insert(selection.active, text);
+        } else {
+            editBuilder.replace(selection, text);
+        }
+    });
+};
+
 export function activate(context: vscode.ExtensionContext) {
     let registrationObjs = [
         vscode.commands.registerCommand('vstosc.knitRmd', knitRmd),
@@ -400,6 +517,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerTextEditorCommand('vstosc.testRFunction', testRFunction),
         vscode.commands.registerCommand('vstosc.toggleEditorTerminalFocus', toggleEditorTerminalFocus),
         vscode.commands.registerCommand('vstosc.goToAnything', goToAnything),
+        vscode.commands.registerCommand('vstosc.insertNumbers', insertNumbers),
     ];
 
     // Track focus changes
