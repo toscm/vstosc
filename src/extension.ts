@@ -427,8 +427,8 @@ export const parseNumberSpec = (spec: string): number[] | null => {
     
     if (parts.length === 2) {
         // Format: a:b (integer sequence)
-        const start = Math.floor(a);
-        const end = Math.floor(b);
+        const start = Math.trunc(a);
+        const end = Math.trunc(b);
         const actualStep = start <= end ? 1 : -1;
         
         for (let i = start; actualStep > 0 ? i <= end : i >= end; i += actualStep) {
@@ -436,13 +436,14 @@ export const parseNumberSpec = (spec: string): number[] | null => {
         }
     } else {
         // Format: a:b:s (sequence with custom step)
+        // Use counter-based approach to avoid floating-point precision errors
         if (step > 0) {
-            for (let i = a; i <= b; i += step) {
-                numbers.push(i);
+            for (let count = 0; a + count * step <= b + Number.EPSILON; count++) {
+                numbers.push(a + count * step);
             }
         } else {
-            for (let i = a; i >= b; i += step) {
-                numbers.push(i);
+            for (let count = 0; a + count * step >= b - Number.EPSILON; count++) {
+                numbers.push(a + count * step);
             }
         }
     }
