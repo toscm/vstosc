@@ -489,8 +489,9 @@ const insertNumbers = async function () {
     }
     
     const numbers = parseNumberSpec(input);
+    // Defensive check - should not happen due to validation, but ensures type safety
     if (numbers === null || numbers.length === 0) {
-        return; // Should not happen due to validation, but just in case
+        return;
     }
     
     // Insert numbers at cursor position, one per line
