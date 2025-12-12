@@ -4,6 +4,15 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.6.0
+
+- Added command [insertNumbers](README.md#insertnumbers) to generate ascending, descending, or stepped number sequences directly in the editor.
+- [runCommand](README.md#runcommand) and [runSelection](README.md#runselection) now keep leading whitespace so shell output retains indentation while still trimming trailing space.
+
+## 1.5.1
+
+- Improved [goToAnything](README.md#gotoanything) by adding quick targets for Source Control (`g`) and AI Chat (`i`) and by focusing the SCM view more reliably.
+
 ## 1.5.0
 
 - Added command [goToAnything](README.md#gotoanything)

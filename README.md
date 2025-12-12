@@ -4,17 +4,19 @@
 
 # VSTosc
 
-Productivity shortcuts from [ToSc](https://github.com/toscm/vstosc), e.g.:
+General commands to boost productivity:
 
 - [goToAnything](#gotoanything) – Jump to UI areas or line:column instantly
-- [runCommand](#runcommand) – Run shell input against the selection/stdin
-- [runSelection](#runselection) – Execute selection as shell script inline
-- [toggleEditorTerminalFocus](#toggleeditorterminalfocus) – Smart editor/terminal toggle
-- [mathMode](#mathmode) – Insert `~$$` and place cursor inside math mode
-- [knitRmd](#knitrmd) – Render current file via `rmarkdown::render`
-- [updateRDocstring](#updaterdocstring) – Generate roxygen2 docs for current R fn
-- [testRFunction](#testrfunction) – Run the matching `testthat` file/function
+- [runCommand](#runcommand) – Pipe current selection into any shell command
+- [runSelection](#runselection) – Execute current selection as shell command
 - [insertNumbers](#insertnumbers) – Generate and insert number sequences
+- [toggleEditorTerminalFocus](#toggleeditorterminalfocus) – Smart editor/terminal toggle
+
+Specialized commands for R development:
+
+- [knitRmd](#knitrmd) – Render current file via `rmarkdown::render`
+- [updateRDocstring](#updaterdocstring) – Generate roxygen2 docs for currently selected R function
+- [testRFunction](#testrfunction) – Run `testthat` file of currently selected R function
 
 ## Installation
 

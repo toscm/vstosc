@@ -3,7 +3,7 @@
   "displayName": "VSTosc",
   "description": "GoToAnything, runCommand, runSelection etc.",
   "publisher": "toscm",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "contributors": [
     {
       "name": "Tobias Schmidt",
