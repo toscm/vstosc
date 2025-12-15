@@ -85,11 +85,11 @@ function findExistingBlock(document: vscode.TextDocument): vscode.Range | null {
     let endLine = -1;
 
     for (let i = 0; i < document.lineCount; i++) {
-        const lineText = document.lineAt(i).text;
-        if (startLine === -1 && lineText.includes(startMarker)) {
+        const lineText = document.lineAt(i).text.trim();
+        if (startLine === -1 && lineText === startMarker) {
             startLine = i;
         }
-        if (startLine !== -1 && lineText.includes(endMarker)) {
+        if (startLine !== -1 && lineText === endMarker) {
             endLine = i;
             break;
         }
