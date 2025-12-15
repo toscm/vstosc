@@ -3,7 +3,7 @@
   "displayName": "VSTosc",
   "description": "GoToAnything, runCommand, runSelection etc.",
   "publisher": "toscm",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "contributors": [
     {
       "name": "Tobias Schmidt",
@@ -61,6 +61,10 @@
       {
         "command": "vstosc.insertNumbers",
         "title": "vstosc: Insert Numbers"
+      },
+      {
+        "command": "vstosc.generateMarkdownReferenceLinks",
+        "title": "vstosc: Generate Markdown Reference Links"
       }
     ],
     "configuration": {
