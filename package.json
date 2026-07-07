@@ -4,6 +4,7 @@
   "description": "GoToAnything, runCommand, runSelection etc.",
   "publisher": "toscm",
   "version": "1.7.0",
+  "icon": "icon.png",
   "contributors": [
     {
       "name": "Tobias Schmidt",

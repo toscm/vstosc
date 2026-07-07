@@ -1,5 +1,5 @@
-[![version](https://img.shields.io/vscode-marketplace/v/toscm.vstosc.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=toscm.vstosc)
-[![installs](https://img.shields.io/vscode-marketplace/d/toscm.vstosc.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=toscm.vstosc)
+[![version](https://vsmarketplacebadges.dev/version/toscm.vstosc.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=toscm.vstosc)
+[![installs](https://vsmarketplacebadges.dev/installs/toscm.vstosc.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=toscm.vstosc)
 [![build](https://github.com/toscm/vstosc/actions/workflows/build.yml/badge.svg)](https://github.com/toscm/vstosc/actions/workflows/build.yml)
 
 # VSTosc

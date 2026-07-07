@@ -7,6 +7,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 1.7.0
 
 - Added command [generateMarkdownReferenceLinks](README.md#generatemarkdownreferencelinks) to automatically generate reference-style links from Markdown headings.
+- Added an extension icon.
+- Fixed the "retired" Marketplace badges in the README by switching from the discontinued shields.io Visual Studio Marketplace route to vsmarketplacebadges.dev.
 
 ## 1.6.1
 
