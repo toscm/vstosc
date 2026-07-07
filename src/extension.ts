@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { updateRDocstring } from './updateRDocstring';
 import { testRFunction } from './testRFunction';
+import { generateMarkdownReferenceLinks } from './generateMarkdownReferenceLinks';
 
 // Track the last focused element type
 let lastFocusedElement: 'terminal' | 'editor' | 'unknown' = 'unknown';
@@ -548,6 +549,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('vstosc.toggleEditorTerminalFocus', toggleEditorTerminalFocus),
         vscode.commands.registerCommand('vstosc.goToAnything', goToAnything),
         vscode.commands.registerCommand('vstosc.insertNumbers', insertNumbers),
+        vscode.commands.registerCommand('vstosc.generateMarkdownReferenceLinks', generateMarkdownReferenceLinks),
     ];
 
     // Track focus changes

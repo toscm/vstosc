@@ -4,6 +4,12 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.7.0
+
+- Added command [generateMarkdownReferenceLinks](README.md#generatemarkdownreferencelinks) to automatically generate reference-style links from Markdown headings.
+- Added an extension icon.
+- Fixed the "retired" Marketplace badges in the README by switching from the discontinued shields.io Visual Studio Marketplace route to vsmarketplacebadges.dev.
+
 ## 1.6.1
 
 - Bugfix: [insertNumbers](README.md#insertnumbers) now inserts numbers at every active cursor instead of only the first one.
