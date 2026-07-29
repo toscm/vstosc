@@ -5,6 +5,7 @@ import * as os from 'os';
 import { updateRDocstring } from './updateRDocstring';
 import { testRFunction } from './testRFunction';
 import { generateMarkdownReferenceLinks } from './generateMarkdownReferenceLinks';
+import { WordWrapStatusBar } from './wordWrapStatusBar';
 
 // Track the last focused element type
 let lastFocusedElement: 'terminal' | 'editor' | 'unknown' = 'unknown';
@@ -539,6 +540,8 @@ const insertNumbers = async function () {
 };
 
 export function activate(context: vscode.ExtensionContext) {
+    const wordWrapStatusBar = new WordWrapStatusBar();
+
     let registrationObjs = [
         vscode.commands.registerCommand('vstosc.knitRmd', knitRmd),
         vscode.commands.registerTextEditorCommand('vstosc.mathMode', mathMode),
@@ -550,6 +553,8 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('vstosc.goToAnything', goToAnything),
         vscode.commands.registerCommand('vstosc.insertNumbers', insertNumbers),
         vscode.commands.registerCommand('vstosc.generateMarkdownReferenceLinks', generateMarkdownReferenceLinks),
+        vscode.commands.registerCommand('vstosc.selectWordWrap', () => wordWrapStatusBar.selectWordWrap()),
+        vscode.commands.registerCommand('vstosc.selectRewrapColumn', () => wordWrapStatusBar.selectRewrapColumn()),
     ];
 
     // Track focus changes
@@ -572,7 +577,7 @@ export function activate(context: vscode.ExtensionContext) {
         lastFocusedElement = 'terminal';
     }
 
-    context.subscriptions.push(...registrationObjs, onDidChangeActiveTextEditor, onDidChangeActiveTerminal);
+    context.subscriptions.push(...registrationObjs, onDidChangeActiveTextEditor, onDidChangeActiveTerminal, wordWrapStatusBar);
 };
 
 export function deactivate() { };

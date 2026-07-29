@@ -3,7 +3,7 @@
   "displayName": "VSTosc",
   "description": "GoToAnything, runCommand, runSelection etc.",
   "publisher": "toscm",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "icon": "icon.png",
   "contributors": [
     {
@@ -23,7 +23,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -66,6 +68,14 @@
       {
         "command": "vstosc.generateMarkdownReferenceLinks",
         "title": "vstosc: Generate Markdown Reference Links"
+      },
+      {
+        "command": "vstosc.selectWordWrap",
+        "title": "vstosc: Set word wrap for the current language"
+      },
+      {
+        "command": "vstosc.selectRewrapColumn",
+        "title": "vstosc: Set Rewrap column for the current language"
       }
     ],
     "configuration": {
@@ -85,6 +95,40 @@
           "type": "string",
           "default": "/bin/sh -e",
           "description": "Shell command that runCommand and runSelection use on Linux before appending the generated script path."
+        },
+        "vstosc.wordWrap.columns": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "default": [
+            60,
+            66,
+            72,
+            80,
+            100,
+            120
+          ],
+          "description": "Columns offered by the Wrap and Rewrap status bar items. A custom value can always be typed in."
+        },
+        "vstosc.wordWrap.target": {
+          "type": "string",
+          "enum": [
+            "global",
+            "workspace"
+          ],
+          "default": "global",
+          "description": "Where the status bar items write the wrap settings: your user settings or the current workspace. In both cases they are written for the language of the active editor only."
+        },
+        "vstosc.wordWrap.columnMode": {
+          "type": "string",
+          "enum": [
+            "bounded",
+            "wordWrapColumn"
+          ],
+          "default": "bounded",
+          "description": "Which editor.wordWrap mode to use when a column is picked. 'bounded' wraps at the column or the viewport, whichever is narrower; 'wordWrapColumn' always wraps at the column."
         }
       }
     },

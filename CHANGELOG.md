@@ -4,6 +4,17 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.8.0
+
+- Added a [word wrap status bar](README.md#word-wrap-status-bar): a `Wrap: off` / `Wrap: on` / `Wrap: 66` item, plus a separate `Rewrap: 66` item that only appears when Rewrap or Rewrap Revived is installed. Both read and write their settings for the language of the active editor, so a 66 column measure for Markdown does not follow you into TypeScript. Offered columns are 60, 66, 72, 80, 100 and 120, plus a free-text entry.
+- Added the settings `vstosc.wordWrap.columns`, `vstosc.wordWrap.target` and `vstosc.wordWrap.columnMode`.
+- The extension now activates on `onStartupFinished` instead of waiting for one of its commands, which is what a status bar item needs in order to appear at all.
+
+## 1.7.1
+
+- Bugfix: [generateMarkdownReferenceLinks](README.md#generatemarkdownreferencelinks) now writes the heading text alone as the link label. VS Code's Markdown symbol provider reports a heading with its markup attached, so the labels came out as `[## Relevant Links]: #relevant-links` instead of `[Relevant Links]: #relevant-links`. Closed ATX headings (`## Title ##`) lose their trailing hashes too.
+- Bugfix: The reference links block is now always separated from the text above it by exactly one blank line, whether it is appended for the first time or replaced. Appending to a file that already ended in a newline used to glue the block straight onto the last line.
+
 ## 1.7.0
 
 - Added command [generateMarkdownReferenceLinks](README.md#generatemarkdownreferencelinks) to automatically generate reference-style links from Markdown headings.
