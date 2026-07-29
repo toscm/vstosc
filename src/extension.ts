@@ -554,6 +554,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('vstosc.insertNumbers', insertNumbers),
         vscode.commands.registerCommand('vstosc.generateMarkdownReferenceLinks', generateMarkdownReferenceLinks),
         vscode.commands.registerCommand('vstosc.selectWordWrap', () => wordWrapStatusBar.selectWordWrap()),
+        vscode.commands.registerCommand('vstosc.cycleWordWrap', () => wordWrapStatusBar.cycleWordWrap()),
         vscode.commands.registerCommand('vstosc.selectRewrapColumn', () => wordWrapStatusBar.selectRewrapColumn()),
     ];
 

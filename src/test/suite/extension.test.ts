@@ -261,13 +261,64 @@ suite('Extension Test Suite', () => {
 	});
 
 	suite('formatRewrapLabel', () => {
-		test('should show the configured column', () => {
-			assert.strictEqual(wordWrap.formatRewrapLabel(66), 'Rewrap: 66');
+		test('should always show a column', () => {
+			assert.strictEqual(wordWrap.formatRewrapLabel({ column: 66, source: 'rewrap' }), 'Rewrap: 66');
+			assert.strictEqual(wordWrap.formatRewrapLabel({ column: 80, source: 'fallback' }), 'Rewrap: 80');
+		});
+	});
+
+	suite('resolveRewrapColumn', () => {
+		test('should prefer an explicit rewrap column', () => {
+			assert.deepStrictEqual(
+				wordWrap.resolveRewrapColumn(66, [72], 80),
+				{ column: 66, source: 'rewrap' });
 		});
 
-		test('should show auto when no column is set', () => {
-			assert.strictEqual(wordWrap.formatRewrapLabel(undefined), 'Rewrap: auto');
-			assert.strictEqual(wordWrap.formatRewrapLabel(0), 'Rewrap: auto');
+		test('should fall back to the first ruler', () => {
+			assert.deepStrictEqual(
+				wordWrap.resolveRewrapColumn(undefined, [72, 100], 80),
+				{ column: 72, source: 'rulers' });
+		});
+
+		test('should read a ruler given as an object', () => {
+			assert.deepStrictEqual(
+				wordWrap.resolveRewrapColumn(undefined, [{ column: 66, color: '#333' }], 80),
+				{ column: 66, source: 'rulers' });
+		});
+
+		test('should fall back to editor.wordWrapColumn without rulers', () => {
+			assert.deepStrictEqual(
+				wordWrap.resolveRewrapColumn(undefined, [], 100),
+				{ column: 100, source: 'editor' });
+		});
+
+		test('should fall back to 80 when nothing is set', () => {
+			assert.deepStrictEqual(
+				wordWrap.resolveRewrapColumn(undefined, undefined, undefined),
+				{ column: 80, source: 'fallback' });
+		});
+
+		test('should ignore zero and malformed entries', () => {
+			assert.deepStrictEqual(
+				wordWrap.resolveRewrapColumn(0, [0, null, 'x', 66], 0),
+				{ column: 66, source: 'rulers' });
+		});
+	});
+
+	suite('nextWrapMode', () => {
+		test('should cycle off -> on -> bounded -> off', () => {
+			assert.strictEqual(wordWrap.nextWrapMode('off'), 'on');
+			assert.strictEqual(wordWrap.nextWrapMode('on'), 'bounded');
+			assert.strictEqual(wordWrap.nextWrapMode('bounded'), 'off');
+		});
+
+		test('should treat wordWrapColumn as bounded', () => {
+			assert.strictEqual(wordWrap.nextWrapMode('wordWrapColumn'), 'off');
+		});
+
+		test('should start the cycle when the mode is unset or unknown', () => {
+			assert.strictEqual(wordWrap.nextWrapMode(undefined), 'on');
+			assert.strictEqual(wordWrap.nextWrapMode('nonsense'), 'off');
 		});
 	});
 

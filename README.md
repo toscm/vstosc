@@ -287,18 +287,37 @@ Wrap: off       no wrapping
 Wrap: on        wrapping at the viewport width
 Wrap: 66        wrapping at column 66
 Rewrap: 66      Rewrap wraps at column 66
-Rewrap: auto    Rewrap follows editor.rulers or editor.wordWrapColumn
 ```
 
 Click the first item to pick `off`, `on`, one of the preset columns, or a custom
 one. Picking a column writes `editor.wordWrap` and `editor.wordWrapColumn`
 together.
 
-The second item only appears when [Rewrap](https://marketplace.visualstudio.com/items?itemName=stkb.rewrap)
-(`stkb.rewrap`) or [Rewrap Revived](https://marketplace.visualstudio.com/items?itemName=dnut.rewrap-revived)
-(`dnut.rewrap-revived`) is installed. It writes `rewrap.wrappingColumn`, and its
-`Default` entry removes the setting again so that Rewrap goes back to following
-your rulers.
+`Alt+Z` cycles `off` → `on` → `bounded` → `off` and is reflected in the status
+bar. It replaces VS Code's built-in `editor.action.toggleWordWrap`, which is
+not a mistake but the whole point: the built-in command applies a session-only
+override to the editor instead of writing a setting, and the extension API
+offers no way to read that override back, so no status bar item can follow it.
+To get the built-in behaviour back, add this to your `keybindings.json`:
+
+```jsonc
+{ "key": "alt+z", "command": "-vstosc.cycleWordWrap" }
+```
+
+The second item writes `rewrap.wrappingColumn`, for
+[Rewrap](https://marketplace.visualstudio.com/items?itemName=stkb.rewrap) or
+[Rewrap Revived](https://marketplace.visualstudio.com/items?itemName=dnut.rewrap-revived).
+It always shows a number, because an unset `rewrap.wrappingColumn` is not an
+absence but an inheritance: Rewrap then follows your first `editor.rulers`
+entry, or `editor.wordWrapColumn`, or its default of 80. The tooltip says which
+of those the shown column came from, and the picker's `Default` entry unsets the
+setting again.
+
+If you do not use Rewrap, right-click the status bar and untick `Rewrap Column`.
+VS Code remembers that per profile. The item is not hidden by default and cannot
+be: `StatusBarItem` offers only `show()` and `hide()`, and an item that was never
+shown does not appear in that right-click menu either, so there would be no way
+to switch it back on.
 
 Both write into a language block in your settings, so clicking `66` while a
 Markdown file is open produces:
@@ -311,6 +330,10 @@ Markdown file is open produces:
 }
 ```
 
+Both items sit directly to the right of `Spaces: 4`, and can be dragged
+elsewhere in the status bar or hidden from its right-click menu like any other
+item.
+
 Three settings control the behaviour:
 
 - `vstosc.wordWrap.columns` – the offered columns. Default
@@ -320,9 +343,9 @@ Three settings control the behaviour:
 - `vstosc.wordWrap.columnMode` – `bounded` (default) or `wordWrapColumn`.
   `bounded` wraps at the column or the viewport, whichever is narrower.
 
-The same two pickers are available from the command palette as `vstosc: Set word
-wrap for the current language` and `vstosc: Set Rewrap column for the current
-language`.
+The pickers and the cycle are also available from the command palette as
+`vstosc: Set word wrap for the current language`, `vstosc: Set Rewrap column for
+the current language` and `vstosc: Cycle word wrap (off, on, bounded)`.
 
 ## Contribute
 

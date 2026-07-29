@@ -4,6 +4,13 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.8.1
+
+- `Alt+Z` now cycles word wrap `off` → `on` → `bounded` and the status bar follows it. It replaces VS Code's built-in `editor.action.toggleWordWrap`, which was the only way to make this work: the built-in command applies a session-only override to the editor instead of writing a setting, and the extension API cannot read that override back, so the status bar item was stuck showing `Wrap: off` no matter what you pressed. Rebind with `{ "key": "alt+z", "command": "-vstosc.cycleWordWrap" }` to get the old behaviour back.
+- The Rewrap item is now shown unconditionally instead of only when a Rewrap extension can be detected. Detection cannot see across extension hosts, so over a remote connection it reported "not installed" for an extension that was installed locally, and the item never appeared. If you do not use Rewrap, right-click the status bar and untick `Rewrap Column`.
+- The Rewrap item always shows a column now rather than `Rewrap: auto`. An unset `rewrap.wrappingColumn` is an inheritance, not an absence: Rewrap follows the first `editor.rulers` entry, then `editor.wordWrapColumn`, then its default of 80. The tooltip says which of those the number came from.
+- Both items moved to sit directly right of `Spaces: 4` instead of at the far right of the status bar, and carry ids now, so a position you drag them to is remembered.
+
 ## 1.8.0
 
 - Added a [word wrap status bar](README.md#word-wrap-status-bar): a `Wrap: off` / `Wrap: on` / `Wrap: 66` item, plus a separate `Rewrap: 66` item that only appears when Rewrap or Rewrap Revived is installed. Both read and write their settings for the language of the active editor, so a 66 column measure for Markdown does not follow you into TypeScript. Offered columns are 60, 66, 72, 80, 100 and 120, plus a free-text entry.

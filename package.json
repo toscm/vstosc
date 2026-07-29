@@ -3,7 +3,7 @@
   "displayName": "VSTosc",
   "description": "GoToAnything, runCommand, runSelection etc.",
   "publisher": "toscm",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "icon": "icon.png",
   "contributors": [
     {
@@ -76,6 +76,10 @@
       {
         "command": "vstosc.selectRewrapColumn",
         "title": "vstosc: Set Rewrap column for the current language"
+      },
+      {
+        "command": "vstosc.cycleWordWrap",
+        "title": "vstosc: Cycle word wrap (off, on, bounded)"
       }
     ],
     "configuration": {
@@ -142,6 +146,11 @@
         "command": "vstosc.goToAnything",
         "key": "alt+g",
         "mac": "alt+g"
+      },
+      {
+        "command": "vstosc.cycleWordWrap",
+        "key": "alt+z",
+        "mac": "alt+z"
       }
     ]
   },
