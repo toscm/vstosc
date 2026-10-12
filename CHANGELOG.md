@@ -9,6 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - [insertNumbers](README.md#insertnumbers) recycles the sequence when there are more cursors than numbers, so `1:2` on five cursors inserts 1, 2, 1, 2, 1 instead of failing with an error.
 - insertNumbers previews the numbers it will insert while you type, both in the input dialog and as ghost text at each cursor.
 - insertNumbers accepts `a:` as shorthand for `a:(a+n-1)` with `n` cursors, and `a::s` for `n` numbers starting at `a` with step `s`.
+- Bugfix: Stepped sequences are rounded to the precision of `a` and `s`, so `0:1:0.1` inserts `0.3` instead of `0.30000000000000004`.
 
 ## 1.8.1
 

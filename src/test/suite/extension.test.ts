@@ -104,6 +104,13 @@ suite('Extension Test Suite', () => {
 			assert.deepStrictEqual(extension.parseNumberSpec('10::-2', 3), [10, 8, 6]);
 		});
 
+		test('should not leak floating-point noise into stepped sequences', () => {
+			assert.deepStrictEqual(extension.parseNumberSpec('0:1:0.1'), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
+			assert.deepStrictEqual(extension.parseNumberSpec('0::0.1', 4), [0, 0.1, 0.2, 0.3]);
+			assert.deepStrictEqual(extension.parseNumberSpec('1000.1:1000.4:0.1'), [1000.1, 1000.2, 1000.3, 1000.4]);
+			assert.deepStrictEqual(extension.parseNumberSpec('0:0.003:1e-3'), [0, 0.001, 0.002, 0.003]);
+		});
+
 		test('should return null for a::0', () => {
 			assert.strictEqual(extension.parseNumberSpec('1::0', 3), null);
 		});

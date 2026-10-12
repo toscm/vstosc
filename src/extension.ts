@@ -393,6 +393,15 @@ const goToAnything = function () {
 };
 
 /**
+ * Number of decimal places needed to write `x`, e.g. 2 for 0.25 and 3 for 1e-3
+ */
+const countDecimals = (x: number): number => {
+    const [mantissa, exponent] = String(x).split('e');
+    const decimals = (mantissa.split('.')[1] ?? '').length;
+    return Math.max(decimals - Number(exponent ?? 0), 0);
+};
+
+/**
  * Parse a specification string and generate a list of numbers
  * Supports formats:
  * - "a:b" - integers from a to b (inclusive)
@@ -450,23 +459,17 @@ export const parseNumberSpec = (spec: string, count = 1): number[] | null => {
         }
     } else {
         // Format: a:b:s (sequence with custom step)
-        // Use counter-based approach to avoid floating-point precision errors
-        if (step > 0) {
-            for (let count = 0; ; count++) {
-                const value = a + count * step;
-                if (value > b + Number.EPSILON) {
-                    break;
-                }
-                numbers.push(value);
+        // Use counter-based approach to avoid accumulating floating-point
+        // errors, and round to the precision of a and s so that 0:1:0.1
+        // yields 0.3 rather than 0.30000000000000004
+        const precision = Math.min(Math.max(countDecimals(a), countDecimals(step)), 15);
+        const tolerance = Math.abs(step) * 1e-9;
+        for (let k = 0; ; k++) {
+            const value = Number((a + k * step).toFixed(precision));
+            if (step > 0 ? value > b + tolerance : value < b - tolerance) {
+                break;
             }
-        } else {
-            for (let count = 0; ; count++) {
-                const value = a + count * step;
-                if (value < b - Number.EPSILON) {
-                    break;
-                }
-                numbers.push(value);
-            }
+            numbers.push(value);
         }
     }
 
