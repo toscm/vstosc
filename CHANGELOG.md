@@ -4,6 +4,12 @@ All notable changes to the "vstosc" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 1.9.0
+
+- [insertNumbers](README.md#insertnumbers) recycles the sequence when there are more cursors than numbers, so `1:2` on five cursors inserts 1, 2, 1, 2, 1 instead of failing with an error.
+- insertNumbers previews the numbers it will insert while you type, both in the input dialog and as ghost text at each cursor.
+- insertNumbers accepts `a:` as shorthand for `a:(a+n-1)` with `n` cursors, and `a::s` for `n` numbers starting at `a` with step `s`.
+
 ## 1.8.1
 
 - `Alt+Z` now cycles word wrap `off` → `on` → `bounded` and the status bar follows it. It replaces VS Code's built-in `editor.action.toggleWordWrap`, which was the only way to make this work: the built-in command applies a session-only override to the editor instead of writing a setting, and the extension API cannot read that override back, so the status bar item was stuck showing `Wrap: off` no matter what you pressed. Rebind with `{ "key": "alt+z", "command": "-vstosc.cycleWordWrap" }` to get the old behaviour back.

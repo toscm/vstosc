@@ -397,8 +397,10 @@ const goToAnything = function () {
  * Supports formats:
  * - "a:b" - integers from a to b (inclusive)
  * - "a:b:s" - numbers from a to b with step s (inclusive)
+ * - "a:" - `count` integers starting at a, i.e. "a:(a+count-1)"
+ * - "a::s" - `count` numbers starting at a with step s
  */
-export const parseNumberSpec = (spec: string): number[] | null => {
+export const parseNumberSpec = (spec: string, count = 1): number[] | null => {
     const trimmed = spec.trim();
     const parts = trimmed.split(':');
 
@@ -407,24 +409,28 @@ export const parseNumberSpec = (spec: string): number[] | null => {
     }
 
     const a = parseFloat(parts[0]);
-    const b = parseFloat(parts[1]);
     const hasCustomStep = parts.length === 3;
-    let step = 1;
+    const step = hasCustomStep ? parseFloat(parts[2]) : 1;
 
     // Validate all parts are valid numbers
-    if (isNaN(a) || isNaN(b)) {
+    if (isNaN(a) || isNaN(step)) {
+        return null;
+    }
+    // Validate step is not zero
+    if (step === 0) {
+        return null;
+    }
+
+    // An omitted end means "as many numbers as there are cursors"
+    const openEnd = parts[1].trim() === '';
+    const b = !openEnd ? parseFloat(parts[1])
+        : hasCustomStep ? a + (count - 1) * step
+        : Math.trunc(a) + count - 1;
+    if (isNaN(b)) {
         return null;
     }
 
     if (hasCustomStep) {
-        step = parseFloat(parts[2]);
-        if (isNaN(step)) {
-            return null;
-        }
-        // Validate step is not zero
-        if (step === 0) {
-            return null;
-        }
         // Validate step direction matches range direction (allow a === b)
         if (a !== b && ((b > a && step < 0) || (b < a && step > 0))) {
             return null;
@@ -467,6 +473,30 @@ export const parseNumberSpec = (spec: string): number[] | null => {
     return numbers;
 };
 
+/**
+ * Fit a number sequence to `count` cursors: values are recycled when there
+ * are fewer values than cursors (1:2 on five cursors gives 1, 2, 1, 2, 1) and
+ * surplus values are dropped. A single cursor receives the whole sequence.
+ */
+export const fitNumbersToCursors = (numbers: number[], count: number): number[] => {
+    if (count <= 1 || numbers.length === 0) {
+        return numbers;
+    }
+    return Array.from({ length: count }, (_, i) => numbers[i % numbers.length]);
+};
+
+/**
+ * Describe the numbers that will be inserted, e.g. "1, 2, 1, 2, 1" or
+ * "1, 2, 3, ..., 100 (100 values)" for long sequences.
+ */
+export const formatNumbersPreview = (numbers: number[], maxShown = 10): string => {
+    if (numbers.length <= maxShown) {
+        return numbers.join(', ');
+    }
+    const head = numbers.slice(0, maxShown - 1).join(', ');
+    return `${head}, ..., ${numbers[numbers.length - 1]} (${numbers.length} values)`;
+};
+
 const insertNumbers = async function () {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -474,66 +504,77 @@ const insertNumbers = async function () {
         return;
     }
 
-    const input = await vscode.window.showInputBox({
-        prompt: 'Enter number specification (e.g., "3:7" or "2:10:2")',
-        placeHolder: 'a:b or a:b:s',
-        validateInput: (value: string) => {
-            if (!value.trim()) {
-                return 'Please enter a specification';
-            }
-            const numbers = parseNumberSpec(value);
-            if (numbers === null) {
-                return 'Invalid format. Use "a:b" or "a:b:s" where a, b, and s are numbers';
-            }
-            if (numbers.length === 0) {
-                return 'Specification generates no numbers';
-            }
-            return null;
-        }
+    const selections = editor.selections;
+    if (selections.length === 0) {
+        return;
+    }
+    const nCursors = selections.length;
+
+    // Show the value each cursor will receive as ghost text while typing
+    const previewDecoration = vscode.window.createTextEditorDecorationType({
+        after: {
+            color: new vscode.ThemeColor('editorGhostText.foreground'),
+            fontStyle: 'italic',
+        },
     });
+    const showPreview = (values: number[]) => {
+        if (nCursors === 1) {
+            return; // A multi-line insertion does not fit into one decoration
+        }
+        editor.setDecorations(previewDecoration, selections.map((selection, index) => ({
+            range: new vscode.Range(selection.start, selection.start),
+            renderOptions: { after: { contentText: String(values[index]) } },
+        })));
+    };
+
+    let input: string | undefined;
+    try {
+        input = await vscode.window.showInputBox({
+            prompt: `Enter number specification (e.g., "3:7", "2:10:2" or "1:" for 1 to ${nCursors})`,
+            placeHolder: 'a:b, a:b:s, a: or a::s',
+            validateInput: (value: string) => {
+                showPreview([]);
+                if (!value.trim()) {
+                    return 'Please enter a specification';
+                }
+                const numbers = parseNumberSpec(value, nCursors);
+                if (numbers === null) {
+                    return 'Invalid format. Use "a:b", "a:b:s", "a:" or "a::s" where a, b, and s are numbers';
+                }
+                if (numbers.length === 0) {
+                    return 'Specification generates no numbers';
+                }
+                const values = fitNumbersToCursors(numbers, nCursors);
+                showPreview(values);
+                return {
+                    message: `Inserts: ${formatNumbersPreview(values)}`,
+                    severity: vscode.InputBoxValidationSeverity.Info,
+                };
+            }
+        });
+    } finally {
+        previewDecoration.dispose();
+    }
 
     if (input === undefined) {
         return; // User canceled
     }
 
-    const numbers = parseNumberSpec(input);
+    const numbers = parseNumberSpec(input, nCursors);
     // Defensive check - should not happen due to validation, but ensures type safety
     if (numbers === null || numbers.length === 0) {
         return;
     }
 
-    const selections = editor.selections;
-    if (selections.length === 0) {
-        return;
-    }
-
-    if (selections.length === 1) {
-        const text = numbers.join('\n');
-        const selection = selections[0];
-
-        await editor.edit(editBuilder => {
-            if (selection.isEmpty) {
-                editBuilder.insert(selection.active, text);
-            } else {
-                editBuilder.replace(selection, text);
-            }
-        });
-        return;
-    }
-
-    if (numbers.length < selections.length) {
-        const selectionLabel = selections.length === 1 ? 'selection is' : 'selections are';
-        vscode.window.showErrorMessage(`Specification generated ${numbers.length} value${numbers.length === 1 ? '' : 's'} but ${selections.length} ${selectionLabel} active.`);
-        return;
-    }
+    const values = fitNumbersToCursors(numbers, nCursors);
+    const texts = nCursors === 1 ? [values.join('\n')] : values.map(String);
 
     await editor.edit(editBuilder => {
         selections.forEach((selection, index) => {
-            const value = String(numbers[index]);
             if (selection.isEmpty) {
-                editBuilder.insert(selection.active, value);
+                editBuilder.insert(selection.active, texts[index]);
             } else {
-                editBuilder.replace(selection, value);
+                editBuilder.replace(selection, texts[index]);
             }
         });
     });

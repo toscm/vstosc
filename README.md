@@ -199,9 +199,9 @@ typing.
 
 ### insertNumbers
 
-Generates and inserts number sequences at the current cursor position based on a
-specification. The command opens an input dialog where you can specify the
-number range and step size.
+Generates and inserts number sequences at the current cursor position based on a specification.
+The command opens an input dialog where you can specify the number range and step size.
+While you type, the dialog previews the numbers that will be inserted, and with multiple cursors each cursor shows its value as ghost text.
 
 Supported formats:
 
@@ -213,11 +213,19 @@ Supported formats:
 2. `a:b:s` - Creates numbers from `a` to `b` with step size `s` (inclusive)
    - Example: `2:10:2` generates: 2, 4, 6, 8, 10
    - Example: `0:1:0.25` generates: 0, 0.25, 0.5, 0.75, 1
-   - Example: `10:2:-2` generates: 10, 8, 6, 4, 2 (descending with negative
-     step)
+   - Example: `10:2:-2` generates: 10, 8, 6, 4, 2 (descending with negative step)
 
-The numbers are inserted one per line at the cursor position. If text is
-selected, it will be replaced with the generated numbers.
+3. `a:` - Creates one integer per cursor, starting at `a`, i.e. `a:(a+n-1)` for `n` cursors
+   - Example: `1:` with 5 cursors generates: 1, 2, 3, 4, 5
+
+4. `a::s` - Creates one number per cursor, starting at `a` with step size `s`
+   - Example: `10::-2` with 3 cursors generates: 10, 8, 6
+
+With a single cursor, the numbers are inserted one per line at the cursor position.
+With multiple cursors, each cursor receives one number.
+If the sequence is shorter than the number of cursors, it is recycled, so `1:2` with 5 cursors inserts 1, 2, 1, 2, 1.
+If it is longer, the surplus numbers are dropped.
+Selected text is replaced by the inserted numbers.
 
 ### generateMarkdownReferenceLinks
 

@@ -90,6 +90,48 @@ suite('Extension Test Suite', () => {
 			const result = extension.parseNumberSpec('  3:7  ');
 			assert.deepStrictEqual(result, [3, 4, 5, 6, 7]);
 		});
+
+		test('should expand a: to one number per cursor', () => {
+			assert.deepStrictEqual(extension.parseNumberSpec('3:', 4), [3, 4, 5, 6]);
+			assert.deepStrictEqual(extension.parseNumberSpec('-1.5:', 3), [-1, 0, 1]);
+		});
+
+		test('should treat a: as a single number with one cursor', () => {
+			assert.deepStrictEqual(extension.parseNumberSpec('3:'), [3]);
+		});
+
+		test('should expand a::s to one number per cursor', () => {
+			assert.deepStrictEqual(extension.parseNumberSpec('10::-2', 3), [10, 8, 6]);
+		});
+
+		test('should return null for a::0', () => {
+			assert.strictEqual(extension.parseNumberSpec('1::0', 3), null);
+		});
+	});
+
+	suite('fitNumbersToCursors', () => {
+		test('should recycle values when there are more cursors', () => {
+			assert.deepStrictEqual(extension.fitNumbersToCursors([1, 2], 5), [1, 2, 1, 2, 1]);
+		});
+
+		test('should drop surplus values', () => {
+			assert.deepStrictEqual(extension.fitNumbersToCursors([1, 2, 3, 4], 2), [1, 2]);
+		});
+
+		test('should keep the whole sequence for a single cursor', () => {
+			assert.deepStrictEqual(extension.fitNumbersToCursors([1, 2, 3], 1), [1, 2, 3]);
+		});
+	});
+
+	suite('formatNumbersPreview', () => {
+		test('should list short sequences in full', () => {
+			assert.strictEqual(extension.formatNumbersPreview([1, 2, 1]), '1, 2, 1');
+		});
+
+		test('should abbreviate long sequences', () => {
+			const numbers = Array.from({ length: 100 }, (_, i) => i + 1);
+			assert.strictEqual(extension.formatNumbersPreview(numbers, 4), '1, 2, 3, ..., 100 (100 values)');
+		});
 	});
 
 	suite('generateSlug', () => {
