@@ -3,6 +3,8 @@ on:
     tags:
       - '*'
 name: publish
+permissions:
+  contents: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -18,5 +20,17 @@ jobs:
         run: npm run esbuild
       - name: Install vsce
         run: npm i -g @vscode/vsce
-      - name: Publish
-        run: vsce publish -p ${{ secrets.VSCE_TOKEN }}
+      - name: Package extension
+        run: vsce package --out vstosc.vsix
+      - name: Publish to Marketplace
+        run: vsce publish --packagePath vstosc.vsix -p ${{ secrets.VSCE_TOKEN }}
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Release notes are the CHANGELOG section of this version, with
+          # relative README links made absolute so they resolve on GitHub
+          version="${GITHUB_REF_NAME#v}"
+          awk -v heading="## $version" '$0 == heading {found = 1; next} found && /^## / {exit} found' CHANGELOG.md \
+            | sed "s#](README.md#](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/README.md#g" > notes.md
+          gh release create "$GITHUB_REF_NAME" vstosc.vsix --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
